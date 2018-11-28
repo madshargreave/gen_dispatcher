@@ -10,29 +10,18 @@ defmodule GenDispatcher do
 
       # config/config.exs
       config :my_app, MyApp.Dispatcher,
-        adapter: {
-          GenDispatcher.RedisAdapter,
-          [
-            topic: "my-topic"
-          ]
-        }
+        adapter: {GenDispatcher.RedisAdapter, [topic: "my-topic"]}
   """
 
   @doc false
   defmacro __using__(opts) do
-    {adapter_module, adapter_opts} = Keyword.fetch!(opts, :adapter)
+    otp_app = Keyword.fetch!(opts, :otp_app)
     quote do
+      alias GenDispatcher.Config
 
-      def dispatch(events, opts) do
-        opts =
-          unquote(adapter_opts)
-          |> Keyword.merge(opts)
-
-        apply(
-          unquote(adapter_module),
-          :dispatch,
-          [events, opts]
-        )
+      def dispatch(event, opts) do
+        config = Config.build!(__MODULE__, unquote(otp_app), opts)
+        apply(config.adapter_module, :dispatch, [event, config.adapter_opts])
       end
 
     end
