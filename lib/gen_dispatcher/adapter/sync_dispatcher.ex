@@ -17,5 +17,4 @@ defmodule GenDispatcher.SyncDispatcher do
   def dispatch(event, state) do
     {:ok, state}
   end
-
 end

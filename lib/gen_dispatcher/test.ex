@@ -26,6 +26,7 @@ defmodule GenDispatcher.Test do
 
         :ok
       end
+
       import GenDispatcher.Test
     end
   end
@@ -47,5 +48,4 @@ defmodule GenDispatcher.Test do
       refute_receive {:event, unquote(event)}
     end
   end
-
 end

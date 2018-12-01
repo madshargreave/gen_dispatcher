@@ -6,7 +6,7 @@ defmodule GenDispatcher.Adapter do
   @doc """
   Dispatch event
   """
-  @callback dispatch(event :: Map.t, state :: Map.t) :: :ok | {:error, term}
+  @callback dispatch(event :: Map.t(), state :: Map.t()) :: :ok | {:error, term}
 
   @doc false
   defmacro __using__(_opts) do
@@ -14,5 +14,4 @@ defmodule GenDispatcher.Adapter do
       @behaviour GenDispatcher.Adapter
     end
   end
-
 end

@@ -7,8 +7,7 @@ defmodule GenDispatcher.LocalDispatcher do
 
   @impl true
   def dispatch(event, state) do
-    Logger.info "Dispatching event: #{inspect(event)}"
+    Logger.info("Dispatching event: #{inspect(event)}")
     {:ok, state}
   end
-
 end

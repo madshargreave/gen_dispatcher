@@ -13,5 +13,4 @@ defmodule GenDispatcher.TestDispatcher do
   defp test_process do
     Application.fetch_env!(:gen_dispatcher, :shared_test_process)
   end
-
 end

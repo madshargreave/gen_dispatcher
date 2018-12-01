@@ -10,16 +10,18 @@ defmodule GenDispatcher.Config do
 
     case adapter do
       {module, adapter_opts} = adapter ->
-        {otp_app, %__MODULE__{
-          adapter_module: module,
-          adapter_opts: Keyword.merge(opts, adapter_opts)
-        }}
+        {otp_app,
+         %__MODULE__{
+           adapter_module: module,
+           adapter_opts: Keyword.merge(opts, adapter_opts)
+         }}
+
       module when is_atom(module) ->
-        {otp_app, %__MODULE__{
-          adapter_module: module,
-          adapter_opts: opts
-        }}
+        {otp_app,
+         %__MODULE__{
+           adapter_module: module,
+           adapter_opts: opts
+         }}
     end
   end
-
 end

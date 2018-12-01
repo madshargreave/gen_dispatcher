@@ -54,8 +54,6 @@ defmodule GenDispatcher do
             {:reply, :ok, state}
         end
       end
-
     end
   end
-
 end
