@@ -39,4 +39,13 @@ defmodule GenDispatcher.Test do
     end
   end
 
+  @doc """
+  Refutes that an event was dispatched using the test adapter
+  """
+  defmacro refute_dispatched(event) do
+    quote do
+      refute_receive {:event, unquote(event)}
+    end
+  end
+
 end
