@@ -1,39 +1,41 @@
 defmodule GenDispatcher.Test do
   @moduledoc """
   Test utilities for testing dispatcher integrations
+  """
+  import ExUnit.Assertions
 
-  ## Usage
+  @doc """
+  Imports GenDispatcher.Test
 
-  Define a module that implements the test dispatcher dapter
-
-    # tests/test_helper.exs
-    defmodule TestDispatcher do
-      use GenDispatcher.TestDispatcher, otp_app: :my_app
-    end
-
-    ## tests/dispatcher_test.exs
-    defmodule MyApp.DispatcherTest do
+  `GenDispatcher.Test` and the `GenDispatcher.TestAdapter` work by sending a message to the
+  current process when an event is dispatched.
+  """
+  defmacro __using__(_opts) do
+    quote do
       use ExUnit.Case
 
-      setup do
-        Application.put_env(:gen_dispatcher_test, :parent_pid, self())
+      setup tags do
+        if tags[:async] do
+          raise """
+          you cannot use GenDispatcher.Test shared mode with async tests.
+          Set your test to [async: false]
+          """
+        else
+          Application.put_env(:gen_dispatcher, :shared_test_process, self())
+        end
+
         :ok
       end
-
-      test "it dispatches event" do
-        assert :ok = TestDispatcher.dispatch(%MyApp.Event{})
-        assert_dispatched %MyApp.SomeEvent{}
-      end
+      import GenDispatcher.Test
     end
-  """
-  import ExUnit.Case
+  end
 
   @doc """
   Asserts that an event was dispatched using the test adapter
   """
   defmacro assert_dispatched(event) do
     quote do
-      assert_receive {:event, event}
+      assert_receive {:event, unquote(event)}
     end
   end
 

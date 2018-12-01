@@ -40,11 +40,11 @@ defmodule GenDispatcher.MixProject do
   defp package do
     [
       # This option is only needed when you don't want to use the OTP application name
-      name: "gen_consumer",
+      name: "gen_dispatcher",
       # These are the default files included in the package
       files: ~w(lib .formatter.exs mix.exs),
       licenses: ["Apache 2.0"],
-      links: %{"GitHub" => "https://github.com/madshargreave/gen_consumer"}
+      links: %{"GitHub" => "https://github.com/madshargreave/gen_dispatcher"}
     ]
   end
 

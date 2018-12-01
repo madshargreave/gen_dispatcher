@@ -6,9 +6,9 @@ defmodule GenDispatcher.LocalDispatcher do
   use GenDispatcher.Adapter
 
   @impl true
-  def dispatch(event, opts \\ []) do
+  def dispatch(event, state) do
     Logger.info "Dispatching event: #{inspect(event)}"
-    :ok
+    {:ok, state}
   end
 
 end
