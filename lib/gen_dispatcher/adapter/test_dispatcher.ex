@@ -5,8 +5,13 @@ defmodule GenDispatcher.TestDispatcher do
   use GenDispatcher.Adapter
 
   @impl true
-  def dispatch(event, state) do
-    send(test_process(), {:event, event})
+  def init(opts) do
+    {:ok, :no_state}
+  end
+
+  @impl true
+  def dispatch(topic, event, state) do
+    send(test_process(), {:event, topic, event})
     {:ok, state}
   end
 

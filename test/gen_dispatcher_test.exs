@@ -14,12 +14,12 @@ defmodule GenDispatcherTest do
   end
 
   test "it dispatches event to current test process" do
-    TestDispatcher.dispatch(%{id: 1})
-    assert_dispatched(%{id: 1})
+    TestDispatcher.dispatch("topic", %{id: 1})
+    assert_dispatched("topic", %{id: 1})
   end
 
   test "it refutes events if they have not been dispatched" do
-    TestDispatcher.dispatch(%{id: 1})
-    refute_dispatched(%{id: 2})
+    TestDispatcher.dispatch("topic", %{id: 1})
+    refute_dispatched("topic", %{id: 2})
   end
 end

@@ -17,12 +17,12 @@ defmodule GenDispatcher do
   defmacro __using__(opts) do
     quote bind_quoted: [opts: opts] do
       use GenServer
+      alias GenDispatcher.Serdes
 
-      {otp_app, adapter} = GenDispatcher.Config.compile_config(__MODULE__, opts)
-      @otp_app otp_app
-      @adapter adapter
+      config = GenDispatcher.Config.compile_config(__MODULE__, opts)
+      @config config
 
-      def __adapter__, do: @adapter
+      def __config__, do: @config
 
       def child_spec(opts) do
         %{
@@ -37,22 +37,27 @@ defmodule GenDispatcher do
         GenServer.start_link(__MODULE__, opts, name: name)
       end
 
-      def dispatch(event, opts \\ []) do
-        GenServer.call(__MODULE__, {:dispatch, event, opts})
+      def dispatch(topic, events, opts \\ [])
+      def dispatch(topic, events, opts) when is_list(events) do
+          for event <- events, do: dispatch(topic, event, opts)
+          :ok
+      end
+      def dispatch(topic, event, opts) do
+        GenServer.call(__MODULE__, {:dispatch, topic, event, opts})
       end
 
       @impl true
-      def init(_opts) do
-        state = %{}
-        {:ok, state}
+      def init(opts) do
+        opts = Keyword.merge(__config__().opts, opts)
+        __config__().module.init(opts)
       end
 
       @impl true
-      def handle_call({:dispatch, event, opts}, _from, state) do
-        case __adapter__().adapter_module.dispatch(event, state) do
-          {:ok, state} ->
-            {:reply, :ok, state}
-        end
+      def handle_call({:dispatch, topic, event, opts}, _from, state) do
+        opts = Keyword.merge(__config__().opts, opts)
+        event = Serdes.encode(event)
+        {:ok, state} = __config__().module.dispatch(topic, event, state)
+        {:reply, :ok, state}
       end
     end
   end

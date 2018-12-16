@@ -6,7 +6,12 @@ defmodule GenDispatcher.LocalDispatcher do
   use GenDispatcher.Adapter
 
   @impl true
-  def dispatch(event, state) do
+  def init(opts) do
+    {:ok, :no_state}
+  end
+
+  @impl true
+  def dispatch(topic, event, state) do
     Logger.info("Dispatching event: #{inspect(event)}")
     {:ok, state}
   end
