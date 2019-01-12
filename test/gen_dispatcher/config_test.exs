@@ -8,13 +8,14 @@ defmodule GenDispatcher.ConfigTest do
   setup do
     opts = [adapter: {GenDispatcher.LocalDispatcher, log: false}]
     Application.put_env(:my_app, TestDispatcher, opts)
+    Application.put_env(:my_app, GenDispatcher.LocalDispatcher, [host: "some-host"])
     {:ok, []}
   end
 
   test "it selects correct module" do
     config = GenDispatcher.Config.compile_config(TestDispatcher, [otp_app: :my_app])
     assert config.module == GenDispatcher.LocalDispatcher
-    assert config.opts == [log: false]
+    assert config.opts == [log: false, host: "some-host"]
   end
 
 end

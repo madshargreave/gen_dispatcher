@@ -19,10 +19,9 @@ defmodule GenDispatcher do
       use GenServer
       alias GenDispatcher.Serdes
 
-      config = GenDispatcher.Config.compile_config(__MODULE__, opts)
-      @config config
-
-      def __config__, do: @config
+      def __config__ do
+        GenDispatcher.Config.compile_config(__MODULE__, unquote(opts))
+      end
 
       def child_spec(opts) do
         %{

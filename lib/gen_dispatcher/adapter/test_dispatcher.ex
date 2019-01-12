@@ -3,6 +3,7 @@ defmodule GenDispatcher.TestDispatcher do
   Dispatcher that sends events to a parent test process
   """
   use GenDispatcher.Adapter
+  alias GenDispatcher.Serdes
 
   @impl true
   def init(opts) do
@@ -11,7 +12,7 @@ defmodule GenDispatcher.TestDispatcher do
 
   @impl true
   def dispatch(topic, event, state) do
-    send(test_process(), {:event, topic, event})
+    send(test_process(), {:event, topic, Serdes.decode(event)})
     {:ok, state}
   end
 
